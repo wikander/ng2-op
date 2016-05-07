@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Hero} from './hero';
 import {HeroDetailComponent} from './hero-detail.component';
 import {HeroService} from './hero.service';
+import { OnActivate, Router } from '@angular/router';
 
 
 @Component({
@@ -68,7 +69,7 @@ import {HeroService} from './hero.service';
 directives: [HeroDetailComponent],
 providers: []
 })
-export class HeroesComponent implements OnInit {
+export class HeroesComponent implements OnActivate {
   constructor(private _heroService: HeroService) { }
 
   errorMessage: string;
@@ -82,7 +83,8 @@ export class HeroesComponent implements OnInit {
                      heroes => this.heroes = heroes,
                      error =>  this.errorMessage = <any>error);
   }
-  ngOnInit() {
+
+  routerOnActivate() {
     this.getHeroes();
   }
 

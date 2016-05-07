@@ -1,18 +1,54 @@
-import { Component }       from '@angular/core';
+import { Component, OnInit }       from '@angular/core';
 import { HeroesComponent } from './heroes.component';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
+import { HomeComponent } from './home.component';
+import { CreateTeamComponent } from './create-team.component';
+
+import { Routes, Router, ROUTER_DIRECTIVES } from '@angular/router';
 import {HeroService} from './hero.service';
 import { HTTP_PROVIDERS }    from '@angular/http';
 
 @Component({
   selector: 'my-app',
   template: `
-    <h1>{{title}}</h1>
-    <my-heroes></my-heroes>
+  <div class="mdl-layout__container">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">{{title}}</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" [routerLink]="['/heroes']">Heroes</a>
+      <a class="mdl-navigation__link" [routerLink]="['/team/create']">Create Mob</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+    <!-- Slider with Starting Value -->
+  </main>
+</div>
+</div>
   `,
-  directives: [HeroesComponent],
+  styles: [`.router-link-active {
+    font-weight: bold;
+    color: black !important;
+  }`],
+  directives: [ROUTER_DIRECTIVES],
   providers: [HTTP_PROVIDERS, HeroService]
 })
+@Routes([
+  {
+    path: '/heroes',
+    component: HeroesComponent
+  },
+  {
+    path: '/team/create',
+    component: CreateTeamComponent
+  },
+  {
+    path: '*',
+    component: HomeComponent
+  }
+])
 export class AppComponent {
-  title = 'Tour of Heroes';
+  title = "OPMobProgammer"
 }

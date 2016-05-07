@@ -15,8 +15,5 @@
     "node_modules",
     "typings/main",
     "typings/main.d.ts"
-  ],
-  "files": [
-    "typings/es6-shim/es6-shim.d.ts"
   ]
 }
