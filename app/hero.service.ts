@@ -8,7 +8,7 @@ import {Observable}     from 'rxjs/Observable';
 export class HeroService {
   constructor (private http: Http) {}
   private _heroesUrl = 'http://localhost:5050/mob';  // URL to web api
-  getHeroes (): Observable<Hero[]> {
+  getHeroes (): Observable<Mob[]> {
     return this.http.get(this._heroesUrl)
                     .map(this.extractData)
                     .catch(this.handleError);

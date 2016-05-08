@@ -1,0 +1,27 @@
+.mob-interval {
+  font-size: 24px;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-flex;
+}
+
+.mob-interval > .material-icons {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.mdl-textfield {
+  width: 100% !important;
+}
+
+.mob-card {
+  width: 100% !important;
+}
+
+.add-name-container {
+  display: flex;
+}
+
+.add-name-container > .mdl-button {
+  margin-left: 20px;
+}

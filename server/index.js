@@ -11,13 +11,17 @@ let express = require('express'),
       autosave: true,
       autosaveInterval: 1000
     }),
-    teams;
+    teams, mob;
 
     function loadHandler() {
-      // if database did not exist it will be empty so I will intitialize here
       teams = db.getCollection('teams');
       if (teams === null) {
         teams = db.addCollection('teams')
+      }
+
+      mob = db.getCollection('mob');
+      if (mob === null) {
+        mob = db.addCollection('mob')
       }
     }
 
@@ -51,6 +55,19 @@ function sendSuccessResult(res, data) {
   res.send(returnObj);
 }
 
+function mapFromDb(lokiObj) {
+  lokiObj.id = lokiObj.$loki;
+  return _.omit(lokiObj, ['$loki', 'meta']);
+}
+
+function mapToDb(obj) {
+  if (obj.id) {
+      obj.$loki = obj.id;
+      obj.meta = mob.get(obj.id).meta;
+  }
+  return _.omit(obj, ['id']);
+}
+
 app.get('/api/', function (req, res) {
   console.log(app._router.stack);
 
@@ -69,61 +86,40 @@ app.get('/api/', function (req, res) {
   sendSuccessResult(res, api);
 });
 
-app.get('/team/:id', function (req, res) {
-  var teamId = req.params.id;
+app.get('/mob/:id', function (req, res) {
+  let mobId = req.params.id;
 
-  if (typeof teamId === "string") {
-    var teamId = parseInt(teamId);
+  if (typeof mobId === "string") {
+    mobId = parseInt(mobId);
 
-    if (_.isNaN(teamId)) {
+    if (_.isNaN(mobId)) {
       sendErrorResult(res, "Id must be a number");
       return;
     }
   }
-
-  var data = teams.get(teamId);
-  sendSuccessResult(res, data);
-});
-
-app.get('/mob', function (req, res) {
-  let resData = [
-    { "id": 11, "name": "Mr. Nice" },
-    { "id": 12, "name": "Narco" },
-    { "id": 13, "name": "Bombasto" },
-    { "id": 14, "name": "Celeritas" },
-    { "id": 15, "name": "Magneta" },
-    { "id": 16, "name": "RubberMan" },
-    { "id": 17, "name": "Dynama" },
-    { "id": 18, "name": "Dr IQ" },
-    { "id": 19, "name": "Magma" },
-    { "id": 20, "name": "Tornado" }
-  ];
-  sendSuccessResult(res, resData);
+  console.log("Retrieving mob with id:", mobId);
+  let data = mob.get(mobId);
+  sendSuccessResult(res, mapFromDb(data));
 });
 
 app.post('/mob', function (req, res) {
-  let resData = req.body;
-  console.log(resData);
-  sendSuccessResult(res, resData);
+  let mobToSave = mapToDb(req.body);
+  let resData = {};
+  if (mobToSave.$loki) {
+    console.log("Updating mob with id:", mobToSave.$loki);
+    resData = mob.update(mobToSave);
+  } else {
+    console.log("Creating new mob.");
+    resData = mob.insert(mobToSave);
+  }
+  db.saveDatabase();
+  sendSuccessResult(res, mapFromDb(resData));
 });
 
-app.put('/team', function(req, res) {
-  teams.insert({
-     members: [
-       {
-         name: 'Albin'
-       },
-       {
-         name: 'Beata'
-       },
-       {
-         name: 'Carl'
-       }
-     ],
-     interval: 15 * 60 * 1000
-   });
-  db.saveDatabase();
-  sendSuccessResult(res);
+app.get('/mob', function (req, res) {
+  console.log("Retrieving all mobs.");
+  let allMobs = mob.find();
+  sendSuccessResult(res, _.map(allMobs, mapFromDb));
 });
 
 var server = app.listen(app.get('port'), function () {

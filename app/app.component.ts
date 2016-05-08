@@ -1,7 +1,7 @@
 import { Component, OnInit }       from '@angular/core';
 import { HeroesComponent } from './heroes.component';
 import { HomeComponent } from './home.component';
-import { CreateTeamComponent } from './create-team.component';
+import { CreateMobComponent } from './create-mob.component';
 
 import { Routes, Router, ROUTER_DIRECTIVES } from '@angular/router';
 import {HeroService} from './hero.service';
@@ -15,8 +15,8 @@ import { HTTP_PROVIDERS }    from '@angular/http';
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">{{title}}</span>
     <nav class="mdl-navigation">
-      <a class="mdl-navigation__link" [routerLink]="['/heroes']">Heroes</a>
-      <a class="mdl-navigation__link" [routerLink]="['/team/create']">Create Mob</a>
+      <a class="mdl-navigation__link" [routerLink]="['/mobs']">Mobs</a>
+      <a class="mdl-navigation__link" [routerLink]="['/mob/create']">Create Mob</a>
     </nav>
   </div>
   <main class="mdl-layout__content">
@@ -37,12 +37,12 @@ import { HTTP_PROVIDERS }    from '@angular/http';
 })
 @Routes([
   {
-    path: '/heroes',
+    path: '/mobs',
     component: HeroesComponent
   },
   {
-    path: '/team/create',
-    component: CreateTeamComponent
+    path: '/mob/create',
+    component: CreateMobComponent
   },
   {
     path: '*',
