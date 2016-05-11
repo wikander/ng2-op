@@ -2,6 +2,7 @@
 
 let express = require('express'),
     app = express(),
+    expressWs = require('express-ws')(app),
     bodyParser = require('body-parser'),
     _ = require('underscore'),
     loki = require('lokijs'),
@@ -116,11 +117,57 @@ app.post('/mob', function (req, res) {
   sendSuccessResult(res, mapFromDb(resData));
 });
 
+app.post('/mob/start/:id', function (req, res) {
+  let mobId = req.params.id;
+  let mobObj = mob.get(mobId);
+  if (mobObj) {
+    mobObj.startTime = (new Date()).getTime();
+    mob.update(mobObj);
+  }
+  db.saveDatabase();
+  sendSuccessResult(res, "started");
+});
+
 app.get('/mob', function (req, res) {
   console.log("Retrieving all mobs.");
   let allMobs = mob.find();
   sendSuccessResult(res, _.map(allMobs, mapFromDb));
 });
+
+app.ws('/mob/:id', function(ws, req) {
+  ws.on('message', function(msg) {
+    console.log("Got a message: ", msg);
+  });
+
+  console.log("Client connected.");
+});
+
+let mobIdWss = expressWs.getWss('/mob/:id');
+
+function checkIfMobEnded(mobId) {
+  let mobObj = mob.get(mobId);
+  if (mobObj) {
+    if (mobObj.startTime &&
+      (new Date()).getTime() - mobObj.startTime > mobObj.minutes*60000) {
+        return mobObj;
+      } else {
+        return false;
+      }
+  } else {
+    return false;
+  }
+}
+
+setInterval(function () {
+  mobIdWss.clients.forEach(function (client) {
+    let mobId = client.upgradeReq.params.id;
+    console.log(client.upgradeReq.params.id);
+    let mob = checkIfMobEnded(mobId);
+    if (mob) {
+      client.send('mob stopped.');
+    }
+  });
+}, 5000);
 
 var server = app.listen(app.get('port'), function () {
   var host = server.address().address;
