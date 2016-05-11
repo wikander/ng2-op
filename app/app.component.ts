@@ -50,5 +50,5 @@ import { HTTP_PROVIDERS }    from '@angular/http';
   }
 ])
 export class AppComponent {
-  title = "OPMobProgammer"
+  title = "OPMobTimer"
 }

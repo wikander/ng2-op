@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Hero} from './hero';
 import {Mob} from './mob';
 import {HeroDetailComponent} from './hero-detail.component';
 import {HeroService} from './hero.service';

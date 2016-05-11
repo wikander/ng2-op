@@ -1,12 +1,12 @@
-import {Hero} from './hero';
+import {Mobber} from './mobber';
 
 export class Mob {
 
   constructor(minutes: number) {
     this.minutes = minutes;
-    this.members = [];
+    this.mobbers = [];
   }
   minutes: number;
   name: string;
-  members: Hero[];
+  mobbers: Mobber[];
 }

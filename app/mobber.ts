@@ -1,4 +1,4 @@
-export class Hero {
+export class Mobber {
   id: number;
   name: string;
   order: number;

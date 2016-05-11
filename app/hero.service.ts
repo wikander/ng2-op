@@ -1,6 +1,6 @@
 import {Injectable}     from '@angular/core';
 import {Http, Response, RequestOptions, Headers} from '@angular/http';
-import {Hero}           from './hero';
+import {Mobber}           from './mobber';
 import {Mob}           from './mob';
 import {Observable}     from 'rxjs/Observable';
 

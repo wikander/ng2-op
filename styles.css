@@ -25,3 +25,11 @@
 .add-name-container > .mdl-button {
   margin-left: 20px;
 }
+
+.mob-interval-grid .mdl-cell {
+  margin: 0;
+}
+
+.mob-interval-grid p {
+  margin: 0;
+}

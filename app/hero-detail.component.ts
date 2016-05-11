@@ -1,20 +1,20 @@
 import {Component, Input} from '@angular/core';
-import {Hero} from './hero';
+import {Mobber} from './mobber';
 
 @Component({
   selector: 'my-hero-detail',
   template: `
-    <div *ngIf="hero">
-      <h2>{{hero.name}} details!</h2>
-      <div><label>id: </label>{{hero.id}}</div>
+    <div *ngIf="mobber">
+      <h2>{{mobber.name}} details!</h2>
+      <div><label>id: </label>{{mobber.id}}</div>
       <div>
         <label>name: </label>
-        <input [(ngModel)]="hero.name" placeholder="name">
+        <input [(ngModel)]="mobber.name" placeholder="name">
       </div>
     </div>
   `
 })
 export class HeroDetailComponent {
   @Input()
-  hero: Hero;
+  mobber: Mobber;
 }
