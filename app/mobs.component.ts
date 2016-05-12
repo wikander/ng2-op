@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Mob} from './mob';
-import {HeroService} from './hero.service';
+import {MobService} from './mob.service';
 import { OnActivate, Router } from '@angular/router';
 
 @Component({
@@ -22,7 +22,7 @@ import { OnActivate, Router } from '@angular/router';
     providers: []
 })
 export class MobsComponent implements OnActivate {
-  constructor(private _heroService: HeroService) { }
+  constructor(private _mobService: MobService) { }
 
   errorMessage: string;
   mobs:Mob[];
@@ -30,7 +30,7 @@ export class MobsComponent implements OnActivate {
 
   onSelect(mob: Mob) { console.log("You've got the power."); }
   getMobs() {
-    this._heroService.getHeroes()
+    this._mobService.getMobs()
                    .subscribe(
                      mobs => this.mobs = mobs,
                      error =>  this.errorMessage = <any>error);

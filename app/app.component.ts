@@ -4,7 +4,7 @@ import { HomeComponent } from './home.component';
 import { CreateMobComponent } from './create-mob.component';
 
 import { Routes, Router, ROUTER_DIRECTIVES } from '@angular/router';
-import {HeroService} from './hero.service';
+import {MobService} from './mob.service';
 import { HTTP_PROVIDERS }    from '@angular/http';
 
 declare var componentHandler: any;
@@ -34,7 +34,7 @@ declare var componentHandler: any;
     color: black !important;
   }`],
   directives: [ROUTER_DIRECTIVES],
-  providers: [HTTP_PROVIDERS, HeroService]
+  providers: [HTTP_PROVIDERS, MobService]
 })
 @Routes([
   {

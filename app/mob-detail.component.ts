@@ -1,6 +1,6 @@
 import {Component, Input, AfterViewInit} from '@angular/core';
 import {Mob} from './mob';
-import {HeroService} from './hero.service';
+import {MobService} from './mob.service';
 
 declare var componentHandler: any;
 
@@ -46,7 +46,7 @@ export class MobDetailComponent implements AfterViewInit {
 
   private errorMessage: any;
 
-  constructor(private _heroService: HeroService) {
+  constructor(private _mobService: MobService) {
   }
 
   initMdlStuff() {
@@ -62,7 +62,7 @@ export class MobDetailComponent implements AfterViewInit {
   }
 
   createMob() {
-    this._heroService.addMob(this.mob)
+    this._mobService.addMob(this.mob)
                    .subscribe(
                      mob => console.log(mob),
                      error =>  this.errorMessage = <any>error);

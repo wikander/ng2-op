@@ -5,11 +5,13 @@ import {Mob}           from './mob';
 import {Observable}     from 'rxjs/Observable';
 
 @Injectable()
-export class HeroService {
+export class MobService {
   constructor (private http: Http) {}
-  private _heroesUrl = 'http://localhost:5050/mob';  // URL to web api
-  getHeroes (): Observable<Mob[]> {
-    return this.http.get(this._heroesUrl)
+
+  private _mobUrl = 'http://localhost:5050/mob';
+
+  getMobs (): Observable<Mob[]> {
+    return this.http.get(this._mobUrl)
                     .map(this.extractData)
                     .catch(this.handleError);
   }
@@ -19,7 +21,7 @@ export class HeroService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._heroesUrl, body, options)
+    return this.http.post(this._mobUrl, body, options)
                     .map(this.extractData)
                     .catch(this.handleError);
   }
@@ -32,9 +34,8 @@ export class HeroService {
     return body.data || { };
   }
   private handleError (error: any) {
-    // In a real world app, we might send the error to remote logging infrastructure
     let errMsg = error.message || 'Server error';
-    console.error(errMsg); // log to console instead
+    console.error(errMsg);
     return Observable.throw(errMsg);
   }
 }
