@@ -1,12 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Mob} from './mob';
-import {HeroDetailComponent} from './hero-detail.component';
 import {HeroService} from './hero.service';
 import { OnActivate, Router } from '@angular/router';
 
-//<my-hero-detail [hero]="selectedHero"></my-hero-detail>
 @Component({
-    selector: 'my-heroes',
+    selector: 'all-mobs',
     template: `
     <ul class="mdl-list">
       <li *ngFor="let mob of mobs"
@@ -20,17 +18,17 @@ import { OnActivate, Router } from '@angular/router';
       </li>
     </ul>
     `,
-    directives: [HeroDetailComponent],
+    directives: [],
     providers: []
 })
-export class HeroesComponent implements OnActivate {
+export class MobsComponent implements OnActivate {
   constructor(private _heroService: HeroService) { }
 
   errorMessage: string;
   mobs:Mob[];
 
 
-  onSelect(mob: Mob) { this.selectedMob = mob; }
+  onSelect(mob: Mob) { console.log("You've got the power."); }
   getMobs() {
     this._heroService.getHeroes()
                    .subscribe(
@@ -42,6 +40,5 @@ export class HeroesComponent implements OnActivate {
     this.getMobs();
   }
 
-  title = 'Tour of Heroes';
-  selectedMob: Mob;
+  title = 'View of all mobs';
 }

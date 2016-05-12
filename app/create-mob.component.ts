@@ -4,7 +4,7 @@ import {Mob} from './mob';
 import {MobDetailComponent} from './mob-detail.component';
 
 @Component({
-  selector: 'my-hero-detail',
+  selector: 'create-mob',
   directives: [MobDetailComponent],
   providers: [],
   templateUrl: 'app/create-mob.template.html'
