@@ -48,7 +48,6 @@ import { MobViewDetailsComponent } from './mob-viewdetails.component';
 })
 export class MobsComponent implements OnActivate {
   constructor(private _mobService: MobService) {
-    this.theMob = new Mob(12);
   }
 
   errorMessage: string;
