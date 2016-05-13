@@ -10,6 +10,31 @@
 2. Starta appen
   > npm start
 
+## Backend
+1. Response Success
+```javascript
+{
+  "result": "success",
+  "data": data,
+  "err": ""
+}
+```
+
+2. Response Error
+```javascript
+{
+  "result": "error",
+  "err": err
+}
+```
+
+### Websocket
+För detaljer fråga Simon eller kolla i koden.
+
+## Postman
+Vill ni testa backend importera '/ng-2.json.postman_collection' till Postman.
+
 ## Misc
-1. TypeScript definition manager: npm install tsd -g
-2.
+
+
+## Vem gör vad?

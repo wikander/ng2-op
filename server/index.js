@@ -12,14 +12,13 @@ let express = require('express'),
       autosave: true,
       autosaveInterval: 1000
     }),
-    teams, mob;
+    mob;
+
+const start = "start", stop = "stop",
+      started = "started", stopped = "stopped",
+      pause = "pause", paused = "paused";
 
     function loadHandler() {
-      teams = db.getCollection('teams');
-      if (teams === null) {
-        teams = db.addCollection('teams')
-      }
-
       mob = db.getCollection('mob');
       if (mob === null) {
         mob = db.addCollection('mob')
@@ -57,8 +56,12 @@ function sendSuccessResult(res, data) {
 }
 
 function mapFromDb(lokiObj) {
-  lokiObj.id = lokiObj.$loki;
-  return _.omit(lokiObj, ['$loki', 'meta']);
+  if (lokiObj) {
+    lokiObj.id = lokiObj.$loki;
+    return _.omit(lokiObj, ['$loki', 'meta']);
+  } else {
+    return null;
+  }
 }
 
 function mapToDb(obj) {
@@ -103,6 +106,30 @@ app.get('/mob/:id', function (req, res) {
   sendSuccessResult(res, mapFromDb(data));
 });
 
+app.delete('/mob/:id', function (req, res) {
+  let mobId = req.params.id;
+
+  if (typeof mobId === "string") {
+    mobId = parseInt(mobId);
+
+    if (_.isNaN(mobId)) {
+      sendErrorResult(res, "Id must be a number");
+      return;
+    }
+  } else {
+    sendErrorResult(res, "Id must exist as path-param.");
+    return;
+  }
+  console.log("Deleting mob with id:", mobId);
+
+  let data = null;
+  if (mob.get(mobId)) {
+    data = mob.remove(mobId);
+    db.saveDatabase();
+  }
+  sendSuccessResult(res, mapFromDb(data));
+});
+
 app.post('/mob', function (req, res) {
   let mobToSave = mapToDb(req.body);
   let resData = {};
@@ -117,30 +144,101 @@ app.post('/mob', function (req, res) {
   sendSuccessResult(res, mapFromDb(resData));
 });
 
-app.post('/mob/start/:id', function (req, res) {
-  let mobId = req.params.id;
-  let mobObj = mob.get(mobId);
-  if (mobObj) {
-    mobObj.startTime = (new Date()).getTime();
-    mob.update(mobObj);
-  }
-  db.saveDatabase();
-  sendSuccessResult(res, "started");
-});
-
 app.get('/mob', function (req, res) {
   console.log("Retrieving all mobs.");
   let allMobs = mob.find();
   sendSuccessResult(res, _.map(allMobs, mapFromDb));
 });
 
+function startMob(mobId) {
+  let mobObj = mob.get(mobId);
+  if (mobObj && mobObj.startTime === null) {
+    mobObj.startTime = (new Date()).getTime();
+    mobObj.remainingTime = mobObj.remainingTime || minutesInMillis(mobObj.minutes);
+    mob.update(mobObj);
+    db.saveDatabase();
+
+    let ret = {};
+    ret.action = started;
+    ret.remainingTime = mobObj.remainingTime;
+    ret.startTime = mobObj.startTime;
+    return ret;
+  } else {
+    return null;
+  }
+}
+
+function pauseMob(mobId) {
+  let mobObj = mob.get(mobId);
+  if (mobObj && mobObj.startTime !== null) {
+    mobObj.remainingTime = Math.min(minutesInMillis(mobObj.minutes), mobObj.remainingTime);
+    mobObj.remainingTime = mobObj.remainingTime - ((new Date()).getTime() - mobObj.startTime);
+    mobObj.startTime = null;
+    mob.update(mobObj);
+    db.saveDatabase();
+
+    let ret = {};
+    ret.action = paused;
+    ret.remainingTime = mobObj.remainingTime;
+    ret.startTime = mobObj.startTime;
+    return ret;
+  } else {
+    return null;
+  }
+}
+
+function stopMob(mobId) {
+  let mobObj = mob.get(mobId);
+  if (mobObj) {
+    mobObj.remainingTime = null;
+    mobObj.startTime = null;
+    mob.update(mobObj);
+    db.saveDatabase();
+  }
+
+  return true;
+}
+
+
+
+
 app.ws('/mob/:id', function(ws, req) {
+  let mobId = req.params.id, data = null;
   ws.on('message', function(msg) {
-    console.log("Got a message: ", msg);
+    console.log("Got message: ", msg);
+    console.log("Message from id", mobId);
+    switch (msg) {
+      case start:
+        data = startMob(mobId);
+        sendToMobClient(mobId, data);
+        break;
+      case pause:
+        data = pauseMob(mobId);
+        sendToMobClient(mobId, data);
+        break;
+      default:
+        throw new Error("Undefined action");
+      }
   });
 
   console.log("Client connected.");
 });
+
+
+function sendToMobClient(mobId, data) {
+  if (data) {
+    data = JSON.stringify(data);
+    let mobIdWss = expressWs.getWss('/mob/:id');
+
+    mobIdWss.clients.forEach(function (client) {
+      let id = client.upgradeReq.params.id;
+      if (mobId == id && data) {
+        console.log("sending to", id);
+        client.send(data);
+      }
+    });
+  }
+}
 
 let mobIdWss = expressWs.getWss('/mob/:id');
 
@@ -148,7 +246,8 @@ function checkIfMobEnded(mobId) {
   let mobObj = mob.get(mobId);
   if (mobObj) {
     if (mobObj.startTime &&
-      (new Date()).getTime() - mobObj.startTime > mobObj.minutes*60000) {
+      ((new Date()).getTime() - mobObj.startTime) > mobObj.remainingTime) {
+        stopMob(mobId);
         return mobObj;
       } else {
         return false;
@@ -158,13 +257,17 @@ function checkIfMobEnded(mobId) {
   }
 }
 
+function minutesInMillis(minutes) {
+  return minutes*60000;
+}
 setInterval(function () {
   mobIdWss.clients.forEach(function (client) {
     let mobId = client.upgradeReq.params.id;
-    console.log(client.upgradeReq.params.id);
-    let mob = checkIfMobEnded(mobId);
-    if (mob) {
-      client.send('mob stopped.');
+    let mobEnded = checkIfMobEnded(mobId);
+    if (mobEnded) {
+      let res = {};
+      res.action = stopped;
+      client.send(JSON.stringify(res));
     }
   });
 }, 5000);
