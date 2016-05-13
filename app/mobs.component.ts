@@ -20,7 +20,31 @@ import { MobListDetailComponent } from './mob-list-detail.component';
     <mob-viewdetails [mob]="theMob"></mob-viewdetails>
     `,
     directives: [ROUTER_DIRECTIVES, MobListDetailComponent],
-    providers: []
+    providers: [],
+    styles: [`
+      .mob-link {
+        cursor: pointer;
+        cursor: hand;
+        margin-right: 15px;
+      }
+
+      .mdl-list {
+        min-width: 200px;
+        flex: 0 1 auto
+      }
+
+      mob-viewdetails {
+        margin-top: 20px;
+        min-width: 600px;
+        flex: 0 1 auto
+      }
+
+      :host {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+    `]
 })
 export class MobsComponent implements OnActivate {
   constructor(private _mobService: MobService) {

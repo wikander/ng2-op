@@ -33,7 +33,15 @@ declare var componentHandler: any;
   styles: [`.router-link-active {
     font-weight: bold;
     color: black !important;
-  }`],
+  }
+
+  :host {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  `],
   directives: [ROUTER_DIRECTIVES],
   providers: [HTTP_PROVIDERS, MobService]
 })

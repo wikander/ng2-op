@@ -16,6 +16,12 @@ export class MobService {
                     .catch(this.handleError);
   }
 
+  getMob (id : number) {
+    return this.http.get(this._mobUrl + "/" + id)
+        .map(this.extractData)
+        .catch(this.handleError);
+  }
+
   addMob (mob: Mob): Observable<Mob> {
     let body = JSON.stringify(mob);
     let headers = new Headers({ 'Content-Type': 'application/json' });

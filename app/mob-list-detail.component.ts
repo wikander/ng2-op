@@ -9,7 +9,7 @@ declare var componentHandler: any;
     selector: 'mob-list-detail',
     template: `
       <div class="list-detail">
-        <span>Mob Name: {{mob.name}}</span>
+        <span class="mob-name">{{mob.name}}</span>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)=deleteMob()>Delete</button>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" [routerLink]="['/mob/edit/', mob.id]">Edit</a>
       </div>
@@ -17,7 +17,10 @@ declare var componentHandler: any;
   styles: [`.mob-list-detail{
     padding: 10px;
     display: block;
-  }`],
+    .mob-name{
+      font-weight: bold;
+      font-size: 16px;
+    }}`],
     directives: [ROUTER_DIRECTIVES]
 })
 export class MobListDetailComponent {
