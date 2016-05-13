@@ -12,7 +12,9 @@ export class Mob {
     this.mobbers = [];
     this.startTime = null;
     this.remainingTime = null;
+    this.id = null;
   }
+  id: number;
   minutes: number;
   name: string;
   startTime: number; //millis
