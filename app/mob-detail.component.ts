@@ -71,5 +71,7 @@ export class MobDetailComponent implements AfterViewInit {
   
   onDeleteMobber(order: number){
     this.mob.mobbers = this.mob.mobbers.filter(mobber => mobber.order != order);
+    var order = 1;
+    this.mob.mobbers.forEach(mobber => mobber.order = order++);
   }
 }

@@ -1,4 +1,7 @@
 import {Component} from '@angular/core';
+import {
+  MobProgressComponent
+} from './components/index';
 
 @Component({
   selector: 'home',
@@ -6,6 +9,7 @@ import {Component} from '@angular/core';
     <div class="home-container">
         <img class="logo" src="img/op-logo-black.png">
         <h1>Omegapoint Mob Timer</h1>
+        <mob-progress></mob-progress>
     </div>
   `,
   styles: [`.home-container {
@@ -18,6 +22,7 @@ import {Component} from '@angular/core';
   }
   h1 { text-align: center;}
   `],
+  directives: [MobProgressComponent]
 })
 export class HomeComponent {
 }
