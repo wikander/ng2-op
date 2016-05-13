@@ -28,6 +28,7 @@ declare var componentHandler: any;
                   <i class="material-icons mdl-list__item-icon">person</i>
                   {{ mobber.name }}
               </span>
+              <button (click)="onDeleteMobber(mobber.order)"><i class="material-icons">delete</i></button>
             </li>
           </ul>
         </div>
@@ -66,5 +67,9 @@ export class MobDetailComponent implements AfterViewInit {
                    .subscribe(
                      mob => console.log(mob),
                      error =>  this.errorMessage = <any>error);
+  }
+  
+  onDeleteMobber(order: number){
+    this.mob.mobbers = this.mob.mobbers.filter(mobber => mobber.order != order);
   }
 }
