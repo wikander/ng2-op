@@ -26,6 +26,16 @@ export class MobService {
                     .catch(this.handleError);
   }
 
+  deleteMob (mob: Mob): Observable<Mob> {
+    let url = this._mobUrl + '/' + mob.id;
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(url, options)
+                    .map(this.extractData)
+                    .catch(this.handleError);
+  }
+
   private extractData(res: Response) {
     if (res.status < 200 || res.status >= 300) {
       throw new Error('Bad response status: ' + res.status);
