@@ -18,7 +18,6 @@ export default class MobProgressComponent implements AfterViewInit {
   private socket:WebSocket;
   private isRunning:Boolean;
   private timer:Timer;
-  
   private hej:string = "hejsan"
   initMdlStuff() {
     let objs = document.querySelectorAll('.mdl-progress');
@@ -42,7 +41,7 @@ export default class MobProgressComponent implements AfterViewInit {
       console.log(parsedMessage.action);
       switch(parsedMessage.action) {
         case "started":
-          this.timer.start(parsedMessage.remainingTime);
+          this.timer.start();
         case "paused":
         default:
           console.log("defautl");
