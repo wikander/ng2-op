@@ -1,8 +1,9 @@
-import {Component } from '@angular/core';
-import {ROUTER_DIRECTIVES} from '@angular/router';
+import {Component, OnInit } from '@angular/core';
+import {ROUTER_DIRECTIVES, RouteSegment} from '@angular/router';
 import {Mobber} from './mobber';
 import {Mob} from './mob';
 import {MobDetailComponent} from './mob-detail.component';
+import {MobService} from './mob.service';
 
 @Component({
   selector: 'edit-mob',
@@ -11,20 +12,26 @@ import {MobDetailComponent} from './mob-detail.component';
   templateUrl: 'app/edit-mob.template.html'
 })
 
-
-export class EditMobComponent {
+export class EditMobComponent implements OnInit{
   private mobber: Mobber;
   private mob: Mob;
   private order: number;
 
-  constructor() {
+  constructor(private routeSegment : RouteSegment, private service: MobService) {
     this.mobber = new Mobber();
     this.mob = new Mob(15);
-    this.order = 1;
+  }
+
+  ngOnInit() {
+    var id = this.routeSegment.getParam('id');
+    this.service.getMob(+id).subscribe(
+        mob => {
+          this.mob = mob;
+        }
+    );
   }
 
   addMember() {
-    console.log("click");
     this.mobber.order = this.order;
     this.order++;
     this.mob.mobbers.push(this.mobber);
