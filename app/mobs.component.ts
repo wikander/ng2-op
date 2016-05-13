@@ -13,29 +13,40 @@ import { MobListDetailComponent } from './mob-list-detail.component';
         [class.selected]="mob === selectedMob"
         class="mdl-list__item" >
         <span class="mdl-list__item-primary-content">
-          <mob-list-detail [mob]="mob"></mob-list-detail>
-          {{mob.name}} <a class="mdl-navigation__link" [routerLink]="['/mob/edit']">edit</a>
+          <mob-list-detail [mob]="mob" [mobs]="mobs" [callbackDelete]="onDelete"></mob-list-detail>
         </span>
-
       </li>
     </ul>
+    <mob-viewdetails [mob]="theMob"></mob-viewdetails>
     `,
     directives: [ROUTER_DIRECTIVES, MobListDetailComponent],
     providers: []
 })
 export class MobsComponent implements OnActivate {
-  constructor(private _mobService: MobService) { }
+  constructor(private _mobService: MobService) {
+    this.theMob = new Mob(12);
+    this.onDelete = this.onDelete.bind(this);
+  }
 
   errorMessage: string;
   mobs:Mob[];
+  theMob: Mob
 
 
-  onSelect(mob: Mob) { console.log("You've got the power."); }
+  onSelect(mob: Mob) { this.theMob = mob; }
   getMobs() {
     this._mobService.getMobs()
                    .subscribe(
-                     mobs => this.mobs = mobs,
+                     mobs => {
+                       this.mobs = mobs;
+                     },
                      error =>  this.errorMessage = <any>error);
+  }
+
+  onDelete(mob: Mob){
+    console.log(this);
+    console.log("callback", mob);
+    this.mobs = this.mobs.filter((deleteMob) => deleteMob.id !== mob.id);
   }
 
   routerOnActivate() {

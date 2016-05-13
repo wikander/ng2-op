@@ -47,7 +47,7 @@ declare var componentHandler: any;
     component: CreateMobComponent
   },
   {
-    path: '/mob/edit',
+    path: '/mob/edit/:id',
     component: EditMobComponent
   },
   {
