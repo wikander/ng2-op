@@ -3,6 +3,7 @@ import {ROUTER_DIRECTIVES, RouteSegment} from '@angular/router';
 import {Mobber} from './mobber';
 import {Mob} from './mob';
 import {MobDetailComponent} from './mob-detail.component';
+import {MobService} from './mob.service';
 
 @Component({
   selector: 'edit-mob',
@@ -19,15 +20,20 @@ export class EditMobComponent implements OnInit{
 
   private mobId: string;
 
-  constructor(private routeSegment : RouteSegment) {
+  constructor(private routeSegment : RouteSegment, private service: MobService) {
     this.mobber = new Mobber();
     this.mob = new Mob(15);
     this.order = 1;
   }
 
   ngOnInit() {
-    //let id = this.routerParams.get('id');
-    console.log(this.routeSegment.getParam('id'));
+    var id = this.routeSegment.getParam('id');
+      console.log(id);
+    this.service.getMob(+id).subscribe(
+        mob => {
+          this.mob = mob;
+        }
+    );
   }
 
   addMember() {
