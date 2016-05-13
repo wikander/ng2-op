@@ -9,11 +9,10 @@ import { MobListDetailComponent } from './mob-list-detail.component';
     template: `
     <ul class="mdl-list">
       <li *ngFor="let mob of mobs"
-        (click)="onSelect(mob)"
         [class.selected]="mob === selectedMob"
         class="mdl-list__item" >
         <span class="mdl-list__item-primary-content">
-          <mob-list-detail [mob]="mob" [mobs]="mobs" [callbackDelete]="onDelete"></mob-list-detail>
+          <mob-list-detail [mob]="mob" [mobs]="mobs" [clickCallback]="onSelect" [callbackDelete]="onDelete"></mob-list-detail>
         </span>
       </li>
     </ul>
@@ -48,8 +47,8 @@ import { MobListDetailComponent } from './mob-list-detail.component';
 })
 export class MobsComponent implements OnActivate {
   constructor(private _mobService: MobService) {
-    this.theMob = new Mob(12);
     this.onDelete = this.onDelete.bind(this);
+    this.onSelect = this.onSelect.bind(this);
   }
 
   errorMessage: string;

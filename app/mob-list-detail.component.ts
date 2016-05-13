@@ -9,7 +9,7 @@ declare var componentHandler: any;
     selector: 'mob-list-detail',
     template: `
       <div class="list-detail">
-        <span class="mob-name">{{mob.name}}</span>
+        <span (click)="clickMob(mob)" class="mob-name">{{mob.name}}!!</span>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)=deleteMob()>Delete</button>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" [routerLink]="['/mob/edit/', mob.id]">Edit</a>
       </div>
@@ -28,6 +28,8 @@ export class MobListDetailComponent {
     mob: Mob;
     @Input()
     callbackDelete: any;
+    @Input()
+    clickCallback: any;
 
     private errorMessage: any;
 
@@ -39,5 +41,9 @@ export class MobListDetailComponent {
             .subscribe(
             mob => this.callbackDelete(this.mob),
             error => this.errorMessage = <any>error);
+    }
+
+    clickMob() {
+      this.clickCallback(this.mob);
     }
 }
