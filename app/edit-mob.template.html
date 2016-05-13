@@ -1,0 +1,25 @@
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset">
+    <div *ngIf="mobber">
+      <h2>EDIT Mob</h2>
+      <form action="#">
+        <div class="mdl-textfield mdl-js-textfield">
+          <input class="mdl-textfield__input" type="text" id="mobName" [(ngModel)]="mob.name" autocomplete="off">
+          <label class="mdl-textfield__label" for="mobName">Mob name...</label>
+        </div>
+        <div class="add-name-container">
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="name" [(ngModel)]="mobber.name" autocomplete="off">
+            <label class="mdl-textfield__label" for="name">Name...</label>
+          </div>
+          <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" (click)="addMember()">
+            <i class="material-icons">add</i>
+          </button>
+        </div>
+      </form>
+    </div>
+    <br>
+    <br>
+    <mob-detail [mob]="mob"></mob-detail>
+  </div>
+</div>

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Mob} from './mob';
-import {MobService} from './mob.service';
-import { OnActivate, Router } from '@angular/router';
+import { Component, OnInit} from '@angular/core';
+import { Mob } from './mob';
+import { MobService } from './mob.service';
+import { OnActivate, Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({
     selector: 'all-mobs',
@@ -12,13 +12,13 @@ import { OnActivate, Router } from '@angular/router';
         [class.selected]="mob === selectedMob"
         class="mdl-list__item" >
         <span class="mdl-list__item-primary-content">
-          {{mob.name}}
+          {{mob.name}} <a class="mdl-navigation__link" [routerLink]="['/mob/edit']">edit</a>
         </span>
 
       </li>
     </ul>
     `,
-    directives: [],
+    directives: [ROUTER_DIRECTIVES],
     providers: []
 })
 export class MobsComponent implements OnActivate {

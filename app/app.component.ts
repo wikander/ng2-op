@@ -2,6 +2,7 @@ import { Component, AfterViewInit}       from '@angular/core';
 import { MobsComponent } from './mobs.component';
 import { HomeComponent } from './home.component';
 import { CreateMobComponent } from './create-mob.component';
+import { EditMobComponent } from './edit-mob.component';
 
 import { Routes, Router, ROUTER_DIRECTIVES } from '@angular/router';
 import {MobService} from './mob.service';
@@ -46,9 +47,13 @@ declare var componentHandler: any;
     component: CreateMobComponent
   },
   {
+    path: '/mob/edit',
+    component: EditMobComponent
+  },
+  {
     path: '*',
     component: HomeComponent
-  }
+  },
 ])
 export class AppComponent implements AfterViewInit {
   title = "OPMobTimer"
