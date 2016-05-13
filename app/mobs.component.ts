@@ -13,7 +13,7 @@ import { MobViewDetailsComponent } from './mob-viewdetails.component';
         [class.selected]="mob === selectedMob"
         class="mdl-list__item" >
         <span class="mdl-list__item-primary-content">
-          {{mob.name}} <a class="mdl-navigation__link" [routerLink]="['/mob/edit']">edit</a>
+          {{mob.name}} <a class="mdl-navigation__link" [routerLink]="['/mob/edit/', mob.id]">edit</a>
         </span>
       </li>
     </ul>

@@ -1,5 +1,5 @@
-import {Component } from '@angular/core';
-import {ROUTER_DIRECTIVES} from '@angular/router';
+import {Component, OnInit } from '@angular/core';
+import {ROUTER_DIRECTIVES, RouteSegment} from '@angular/router';
 import {Mobber} from './mobber';
 import {Mob} from './mob';
 import {MobDetailComponent} from './mob-detail.component';
@@ -12,15 +12,22 @@ import {MobDetailComponent} from './mob-detail.component';
 })
 
 
-export class EditMobComponent {
+export class EditMobComponent implements OnInit{
   private mobber: Mobber;
   private mob: Mob;
   private order: number;
 
-  constructor() {
+  private mobId: string;
+
+  constructor(private routeSegment : RouteSegment) {
     this.mobber = new Mobber();
     this.mob = new Mob(15);
     this.order = 1;
+  }
+
+  ngOnInit() {
+    //let id = this.routerParams.get('id');
+    console.log(this.routeSegment.getParam('id'));
   }
 
   addMember() {
