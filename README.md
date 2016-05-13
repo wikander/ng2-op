@@ -38,3 +38,4 @@ Vill ni testa backend importera '/ng-2.json.postman_collection' till Postman.
 
 
 ## Vem gör vad?
+Jag!
