@@ -32,8 +32,7 @@ export class EditMobComponent implements OnInit{
   }
 
   addMember() {
-    this.mobber.order = this.order;
-    this.order++;
+    this.mobber.order = this.mob.mobbers.length + 1;
     this.mob.mobbers.push(this.mobber);
     this.mobber = new Mobber();
   }
